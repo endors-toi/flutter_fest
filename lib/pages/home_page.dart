@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fest/models/evento.dart';
+import 'package:flutter_fest/services/firestore_service.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -7,23 +10,25 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutter Demo Home Page'),
+        title: Text('Flutter Fest'),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text('0'),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      body: StreamBuilder(
+        stream: FirestoreService.obtenerEventos(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData ||
+              snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                Evento evento = Evento.fromSnapshot(snapshot.data!.docs[index]);
+                return ListTile(title: Text(evento.nombre!));
+              },
+            );
+          }
+        },
       ),
     );
   }
