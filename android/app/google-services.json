@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "207100516876",
+    "project_id": "flutter-fest-ein142",
+    "storage_bucket": "flutter-fest-ein142.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207100516876:android:c7bc5a6bf49a5dd210ec29",
+        "android_client_info": {
+          "package_name": "com.usm.flutter_fest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzUWf3VDlsIPa9HiNa_4Ixe3aom-H0Rz8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

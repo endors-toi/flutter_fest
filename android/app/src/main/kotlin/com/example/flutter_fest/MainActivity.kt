@@ -1,4 +1,4 @@
-package com.example.flutter_fest
+package com.usm.flutter_fest
 
 import io.flutter.embedding.android.FlutterActivity
 
