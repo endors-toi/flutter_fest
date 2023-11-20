@@ -4,6 +4,7 @@
 */
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 dynamic extraerCampo(QueryDocumentSnapshot doc, String nombreCampo) =>
     doc.data().toString().contains(nombreCampo) ? doc.get(nombreCampo) : null;
@@ -13,20 +14,20 @@ class Evento {
   Timestamp? _timestamp;
   String? _lugar;
   String? _descripcion;
-  String? _tipo; // if(tipo == "FIESTA"){icon.party}
+  String? _tipo;
   int? _likes;
   String? _foto;
 
   Evento({
     String? nombre,
-    Timestamp? timestamp,
+    DateTime? timestamp,
     String? lugar,
     String? descripcion,
     String? tipo,
-    int? likes,
+    int? likes = 0,
     String? foto,
   })  : _nombre = nombre,
-        _timestamp = timestamp,
+        _timestamp = Timestamp.fromDate(timestamp!),
         _lugar = lugar,
         _descripcion = descripcion,
         _tipo = tipo,
@@ -59,4 +60,29 @@ class Evento {
   set tipo(String? tipo) => _tipo = tipo;
   set likes(int? likes) => _likes = likes;
   set foto(String? foto) => _foto = foto;
+
+  // Métodos
+  String fecha() {
+    return DateFormat("dd/MM/yyyy").format(_timestamp!.toDate());
+  }
+
+  String hora() {
+    return DateFormat("HH:mm").format(_timestamp!.toDate());
+  }
+
+  DateTime timestampToDate() {
+    return _timestamp!.toDate();
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'nombre': _nombre,
+      'timestamp': _timestamp,
+      'lugar': _lugar,
+      'descripcion': _descripcion,
+      'tipo': _tipo,
+      'likes': _likes,
+      'foto': _foto,
+    };
+  }
 }

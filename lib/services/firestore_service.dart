@@ -12,7 +12,9 @@ class FirestoreService {
 
   // agregar evento
   static Future<void> agregarEvento(Evento evento) {
-    return eventos.add(evento);
+    Map<String, dynamic> eve = evento.toMap();
+    print(eve);
+    return eventos.add(evento.toMap());
   }
 
   // obtener evento especifíco

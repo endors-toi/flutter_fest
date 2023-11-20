@@ -18,6 +18,11 @@ dependencies:
   provider: ^6.1.1
   flex_color_scheme: ^7.3.1
   line_icons: ^2.0.3
+  image_picker: ^1.0.4
+  firebase_storage: ^11.5.1
+  intl: ^0.18.1
+  like_button: ^2.0.5
+  flutter_easyloading: ^3.0.5
 
 dev_dependencies:
   flutter_test:

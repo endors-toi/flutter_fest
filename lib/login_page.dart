@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fest/pages/eventos_page.dart';
-import 'package:flutter_fest/services/firebase_auth_service.dart';
+import 'package:flutter_fest/services/authentication_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 class LoginPage extends StatefulWidget {
@@ -20,13 +21,12 @@ class _LoginPageState extends State<LoginPage> {
           child: SignInButton(
             Buttons.google,
             onPressed: () async {
-              var user = await FirebaseAuthService().signInWithGoogle();
-              if (user != null) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => EventosPage()),
-                    (route) => false);
-              }
+              await Provider.of<AuthenticationProvider>(context, listen: false)
+                  .signInWithGoogle();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EventosPage()),
+              );
             },
           ),
         ),
