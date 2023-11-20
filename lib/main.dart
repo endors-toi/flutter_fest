@@ -1,3 +1,4 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fest/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,10 +16,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: FlexThemeData.light(scheme: FlexScheme.purpleM3),
+      darkTheme: FlexThemeData.dark(scheme: FlexScheme.purpleM3),
+      themeMode: ThemeMode.system,
       home: LoginPage(),
     );
   }

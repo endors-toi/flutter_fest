@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fest/pages/home_page.dart';
+import 'package:flutter_fest/pages/eventos_page.dart';
 import 'package:flutter_fest/services/firebase_auth_service.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
               if (user != null) {
                 Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => EventosPage()),
                     (route) => false);
               }
             },

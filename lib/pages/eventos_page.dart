@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fest/models/evento.dart';
 import 'package:flutter_fest/services/firestore_service.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class EventosPage extends StatelessWidget {
+  const EventosPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Fest'),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       ),
       body: StreamBuilder(
         stream: FirestoreService.obtenerEventos(),
