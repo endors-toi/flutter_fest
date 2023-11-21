@@ -23,9 +23,10 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
   TextEditingController _descripcionController = TextEditingController();
   TextEditingController _tipoController = TextEditingController();
   DateTime _timestamp = DateTime.now();
+  File? _image;
+
   bool _isDatePicked = false;
   bool _isTimePicked = false;
-  File? _image;
 
   late Evento _nuevoEvento;
 
@@ -128,29 +129,7 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
                     Container(
                       margin: EdgeInsets.all(8),
                       alignment: Alignment.center,
-                      child: DropdownMenu(
-                        width: MediaQuery.of(context).size.width - 30,
-                        controller: _tipoController,
-                        dropdownMenuEntries: [
-                          DropdownMenuEntry(
-                              value: "CONCIERTO", label: "Concierto"),
-                          DropdownMenuEntry(value: "FIESTA", label: "Fiesta"),
-                          DropdownMenuEntry(
-                              value: "DEPORTIVO", label: "Deportivo"),
-                          DropdownMenuEntry(
-                              value: "EMPRESARIAL", label: "Empresarial"),
-                          DropdownMenuEntry(
-                              value: "CULTURAL", label: "Cultural"),
-                          DropdownMenuEntry(
-                              value: "ACADEMICO", label: "Academico"),
-                        ],
-                        onSelected: (value) {
-                          setState(() {
-                            _tipoController.text = value ?? "";
-                          });
-                        },
-                        label: Text("Tipo de Evento"),
-                      ),
+                      child: _dropdownTipo(context),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 16),
@@ -190,6 +169,27 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
           ),
         ),
       ),
+    );
+  }
+
+  DropdownMenu<String> _dropdownTipo(BuildContext context) {
+    return DropdownMenu(
+      width: MediaQuery.of(context).size.width - 30,
+      controller: _tipoController,
+      dropdownMenuEntries: [
+        DropdownMenuEntry(value: "CONCIERTO", label: "Concierto"),
+        DropdownMenuEntry(value: "FIESTA", label: "Fiesta"),
+        DropdownMenuEntry(value: "DEPORTIVO", label: "Deportivo"),
+        DropdownMenuEntry(value: "EMPRESARIAL", label: "Empresarial"),
+        DropdownMenuEntry(value: "CULTURAL", label: "Cultural"),
+        DropdownMenuEntry(value: "ACADEMICO", label: "Academico"),
+      ],
+      onSelected: (value) {
+        setState(() {
+          _tipoController.text = value ?? "";
+        });
+      },
+      label: Text("Tipo de Evento"),
     );
   }
 

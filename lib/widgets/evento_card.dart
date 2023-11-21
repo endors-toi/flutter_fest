@@ -52,7 +52,7 @@ class _EventoCardState extends State<EventoCard> {
               ),
               Container(
                 margin: EdgeInsets.only(top: 8, right: 8),
-                child: !widget.creating ? Like(widget: widget) : null,
+                child: !widget.creating ? Like(eventoCard: widget) : null,
               ),
             ],
           ),
@@ -81,14 +81,19 @@ class _EventoCardState extends State<EventoCard> {
   }
 }
 
-class Like extends StatelessWidget {
+class Like extends StatefulWidget {
   const Like({
     super.key,
-    required this.widget,
+    required this.eventoCard,
   });
 
-  final EventoCard widget;
+  final EventoCard eventoCard;
 
+  @override
+  State<Like> createState() => _LikeState();
+}
+
+class _LikeState extends State<Like> {
   @override
   Widget build(BuildContext context) {
     return LikeButton(
@@ -108,8 +113,19 @@ class Like extends StatelessWidget {
           size: 30,
         );
       },
-      likeCount: widget.evento.likes,
+      likeCount: widget.eventoCard.evento.likes,
       countPostion: CountPostion.bottom,
+      onTap: onLiked,
     );
+  }
+
+  Future<bool?> onLiked(bool isLiked) async {
+    if (isLiked) {
+      await widget.eventoCard.evento.like();
+    } else {
+      await widget.eventoCard.evento.dislike();
+    }
+    setState(() {});
+    return !isLiked;
   }
 }

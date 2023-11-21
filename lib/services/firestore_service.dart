@@ -10,6 +10,11 @@ class FirestoreService {
     return eventos.snapshots();
   }
 
+  // obtener evento especifíco
+  static Future<DocumentReference> obtenerEvento(String id) async {
+    return await eventos.doc(id);
+  }
+
   // agregar evento
   static Future<void> agregarEvento(Evento evento) {
     Map<String, dynamic> eve = evento.toMap();
@@ -17,8 +22,11 @@ class FirestoreService {
     return eventos.add(evento.toMap());
   }
 
-  // obtener evento especifíco
+  // eliminar evento
+  static Future<void> eliminarEvento(String id) {
+    return eventos.doc(id).delete();
+  }
+
   // obtener eventos por tipo
   // editar evento (put/patch)
-  // eliminar evento
 }
