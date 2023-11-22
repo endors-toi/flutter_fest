@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fest/models/evento.dart';
 
-class VerEventoPage extends StatelessWidget {
+class EventoTile extends StatelessWidget {
   final Evento evento;
 
-  const VerEventoPage({Key? key, required this.evento}) : super(key: key);
+  EventoTile({super.key, required this.evento});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return ListTile();
   }
 }

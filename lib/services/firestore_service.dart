@@ -17,8 +17,6 @@ class FirestoreService {
 
   // agregar evento
   static Future<void> agregarEvento(Evento evento) {
-    Map<String, dynamic> eve = evento.toMap();
-    print(eve);
     return eventos.add(evento.toMap());
   }
 
@@ -27,6 +25,20 @@ class FirestoreService {
     return eventos.doc(id).delete();
   }
 
+  // editar evento
+  static Future<void> editarEvento(Evento evento) {
+    return eventos.doc(evento.documentId).update(evento.toMap());
+  }
+
+  // like evento
+  static Future<void> likeEvento(String id) {
+    return eventos.doc(id).update({'likes': FieldValue.increment(1)});
+  }
+
+  // dislike evento
+  static Future<void> dislikeEvento(String id) {
+    return eventos.doc(id).update({'likes': FieldValue.increment(-1)});
+  }
+
   // obtener eventos por tipo
-  // editar evento (put/patch)
 }

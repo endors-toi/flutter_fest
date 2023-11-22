@@ -56,6 +56,10 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
       appBar: AppBar(
         title: Text('Nuevo evento'),
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        leading: IconButton(
+          icon: Icon(LineIcons.times),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Form(
         key: _formKey,
@@ -85,7 +89,7 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
                         ),
                         onChanged: (_) => setState(() {}),
                         validator: (nombre) {
-                          if (nombre == null || nombre.isEmpty) {
+                          if (nombre == null || nombre.trim() == "") {
                             return 'Debes proporcionar un nombre.';
                           }
                           return null;
@@ -102,7 +106,7 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
                         ),
                         onChanged: (_) => setState(() {}),
                         validator: (desc) {
-                          if (desc == null || desc.isEmpty) {
+                          if (desc == null || desc.trim() == "") {
                             return 'Debes proporcionar una descripción.';
                           }
                           return null;
@@ -119,7 +123,7 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
                         ),
                         onChanged: (_) => setState(() {}),
                         validator: (lugar) {
-                          if (lugar == null || lugar.isEmpty) {
+                          if (lugar == null || lugar.trim() == "") {
                             return 'Debes proporcionar un lugar.';
                           }
                           return null;
@@ -196,7 +200,7 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
   _elegirFecha() {
     showDatePicker(
       context: context,
-      firstDate: DateTime.now(),
+      firstDate: DateTime(1997),
       lastDate: DateTime(DateTime.now().year + 10, 12, 31),
       initialDate: _timestamp,
     ).then((fecha) {
@@ -255,17 +259,18 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
         errores += "Debes seleccionar un tipo de evento.\n";
       if (!_isDatePicked) errores += "Debes seleccionar una fecha.\n";
       if (!_isTimePicked) errores += "Debes seleccionar una hora.\n";
-      if (_isDatePicked && _isTimePicked) {
-        if (_timestamp.isBefore(DateTime.now())) {
-          errores += "El evento no puede ser pasado.";
-        }
-      }
+      // if (_isDatePicked && _isTimePicked) {
+      //   if (_timestamp.isBefore(DateTime.now())) {
+      //     errores += "El evento no puede ser pasado.";
+      //   }
+      // }
       if (errores != "") {
         EasyLoading.showError(errores, duration: Duration(seconds: 3));
-        return false;
+      } else {
+        return true;
       }
     }
-    return true;
+    return false;
   }
 
   _guardarEvento() async {
@@ -278,7 +283,7 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
         EasyLoading.show(status: "Guardando evento...");
         FirestoreService.agregarEvento(_nuevoEvento).then((_) {
           EasyLoading.showSuccess("Evento guardado :-)");
-          Navigator.pop(context);
+          // Navigator.pop(context);
         });
       });
     }
