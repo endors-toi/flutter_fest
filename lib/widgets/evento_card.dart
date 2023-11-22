@@ -5,7 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_fest/models/evento.dart';
 import 'package:flutter_fest/pages/ver_evento_page.dart';
 import 'package:flutter_fest/providers/authentication_provider.dart';
-import 'package:flutter_fest/services/firestore_service.dart';
+import 'package:flutter_fest/services/evento_service.dart';
 import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 
@@ -95,12 +95,12 @@ class _EventoCardState extends State<EventoCard> {
                           countPostion: CountPostion.bottom,
                           onTap: (bool isLiked) async {
                             if (isLiked) {
-                              FirestoreService.dislikeEvento(
+                              EventoService.dislikeEvento(
                                   widget.evento.documentId!);
                               _localLikes--;
                               _hasLiked = false;
                             } else {
-                              FirestoreService.likeEvento(
+                              EventoService.likeEvento(
                                   widget.evento.documentId!);
                               _localLikes++;
                               _hasLiked = true;
@@ -180,7 +180,7 @@ class _EventoCardState extends State<EventoCard> {
                             TextButton(
                               onPressed: () {
                                 EasyLoading.show(status: 'Eliminando...');
-                                FirestoreService.eliminarEvento(
+                                EventoService.eliminarEvento(
                                         widget.evento.documentId!)
                                     .then((_) {
                                   EasyLoading.showSuccess('Evento eliminado');

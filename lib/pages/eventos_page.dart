@@ -5,12 +5,12 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_fest/models/evento.dart';
 import 'package:flutter_fest/pages/nuevo_evento_page.dart';
 import 'package:flutter_fest/providers/authentication_provider.dart';
-import 'package:flutter_fest/services/firestore_service.dart';
+import 'package:flutter_fest/services/evento_service.dart';
 import 'package:flutter_fest/widgets/evento_card.dart';
+import 'package:flutter_fest/widgets/user_drawer.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
-import 'package:sign_in_button/sign_in_button.dart';
 
 class EventosPage extends StatefulWidget {
   const EventosPage({super.key});
@@ -26,7 +26,7 @@ class _EventosPageState extends State<EventosPage> {
 
   @override
   void initState() {
-    _user = Provider.of<AuthenticationProvider>(context, listen: false).user;
+    _getUser();
     super.initState();
   }
 
@@ -34,11 +34,13 @@ class _EventosPageState extends State<EventosPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
-      drawer: _drawer(context),
+      drawer: UserDrawer(
+        onRefresh: () => _getUser(),
+      ),
       body: Padding(
         padding: EdgeInsets.all(8.0),
         child: StreamBuilder(
-          stream: FirestoreService.obtenerEventos(),
+          stream: EventoService.obtenerEventos(),
           builder: _streamBuilder,
         ),
       ),
@@ -76,63 +78,6 @@ class _EventosPageState extends State<EventosPage> {
               )
             : Container(),
       ],
-    );
-  }
-
-  Drawer _drawer(BuildContext context) {
-    return Drawer(
-      child: Column(
-        children: [
-          DrawerHeader(
-            child: Column(
-              children: [
-                CircleAvatar(
-                  backgroundImage: _user != null
-                      ? NetworkImage(_user!.photoURL!)
-                      : Image.asset('assets/images/flutter_fest.png').image,
-                  radius: 50,
-                ),
-                Divider(color: Colors.transparent, height: 10),
-                Text(_user != null
-                    ? _user!.displayName!
-                    : '¡Bienvenido/a a Flutter Fest!'),
-              ],
-            ),
-          ),
-          Spacer(),
-          _user != null
-              ? ListTile(
-                  leading: Icon(FeatherIcons.logOut),
-                  title: Text("Cerrar sesión"),
-                  onTap: () {
-                    if (_user != null) {
-                      Provider.of<AuthenticationProvider>(context,
-                              listen: false)
-                          .signOut()
-                          .then((_) {
-                        setState(() {
-                          _user = null;
-                        });
-                      });
-                      Navigator.pop(context);
-                    }
-                  },
-                )
-              : SignInButton(
-                  Buttons.google,
-                  onPressed: () async {
-                    await Provider.of<AuthenticationProvider>(context,
-                            listen: false)
-                        .signInWithGoogle();
-                    setState(() {
-                      _user = Provider.of<AuthenticationProvider>(context,
-                              listen: false)
-                          .user;
-                    });
-                  },
-                ),
-        ],
-      ),
     );
   }
 
@@ -236,5 +181,11 @@ class _EventosPageState extends State<EventosPage> {
         );
       },
     );
+  }
+
+  void _getUser() {
+    setState(() {
+      _user = Provider.of<AuthenticationProvider>(context, listen: false).user;
+    });
   }
 }

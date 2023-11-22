@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_fest/models/evento.dart';
 import 'package:flutter_fest/services/firebase_storage_service.dart';
-import 'package:flutter_fest/services/firestore_service.dart';
+import 'package:flutter_fest/services/evento_service.dart';
 import 'package:flutter_fest/widgets/evento_card.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
@@ -281,7 +281,7 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
           _nuevoEvento.foto = url;
         });
         EasyLoading.show(status: "Guardando evento...");
-        FirestoreService.agregarEvento(_nuevoEvento).then((_) {
+        EventoService.agregarEvento(_nuevoEvento).then((_) {
           EasyLoading.showSuccess("Evento guardado :-)");
           // Navigator.pop(context);
         });

@@ -4,7 +4,7 @@
 */
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_fest/services/firestore_service.dart';
+import 'package:flutter_fest/services/evento_service.dart';
 import 'package:intl/intl.dart';
 
 class Evento {
@@ -91,13 +91,13 @@ class Evento {
   }
 
   Future<void> like() async {
-    var doc = await FirestoreService.obtenerEvento(_documentId!);
+    var doc = await EventoService.obtenerEvento(_documentId!);
     doc.update({'likes': FieldValue.increment(1)});
     _likes = await doc.get().then((value) => value.get('likes'));
   }
 
   Future<void> dislike() async {
-    var doc = await FirestoreService.obtenerEvento(_documentId!);
+    var doc = await EventoService.obtenerEvento(_documentId!);
     var currentLikes = await doc.get().then((value) => value.get('likes'));
     if (currentLikes > 0) await doc.update({'likes': FieldValue.increment(-1)});
     _likes = await doc.get().then((value) => value.get('likes'));

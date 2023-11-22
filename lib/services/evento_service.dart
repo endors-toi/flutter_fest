@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_fest/models/evento.dart';
 
-class FirestoreService {
+class EventoService {
   static final CollectionReference eventos =
       FirebaseFirestore.instance.collection('eventos');
 
