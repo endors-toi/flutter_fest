@@ -77,8 +77,14 @@ class _GlobalChatPageState extends State<GlobalChatPage> {
               MensajeChat mensaje =
                   MensajeChat.fromSnapshot(snapshot.data!.docs[index]);
               return ListTile(
-                title: Text(mensaje.mensaje),
-                subtitle: Text(mensaje.usuario),
+                title: Text(
+                  mensaje.usuario,
+                  style: TextStyle(fontSize: 12, color: Colors.blueGrey[700]),
+                ),
+                subtitle: Text(
+                  mensaje.mensaje,
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
               );
             },
           );
