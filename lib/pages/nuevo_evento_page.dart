@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
 
 class NuevoEventoPage extends StatefulWidget {
-  const NuevoEventoPage({super.key});
+  NuevoEventoPage({super.key});
 
   @override
   State<NuevoEventoPage> createState() => _NuevoEventoPageState();

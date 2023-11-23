@@ -38,7 +38,7 @@ class _EventosPageState extends State<EventosPage> {
         onRefresh: () => _getUser(),
       ),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(20),
         child: StreamBuilder(
           stream: EventoService.obtenerEventos(),
           builder: _streamBuilder,
@@ -91,7 +91,8 @@ class _EventosPageState extends State<EventosPage> {
           setState(() {});
         },
         showChildOpacityTransition: false,
-        child: ListView.builder(
+        child: ListView.separated(
+          separatorBuilder: (context, index) => SizedBox(height: 16),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             Evento evento = Evento.fromSnapshot(snapshot.data!.docs[index]);

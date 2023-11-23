@@ -28,7 +28,9 @@ class EventoCard extends StatefulWidget {
 class _EventoCardState extends State<EventoCard> {
   late bool _isLoggedIn;
   late int _localLikes;
+  late DateTime _fechaEvento;
   late bool _hasLiked;
+  late bool _isSoon;
 
   @override
   void initState() {
@@ -36,105 +38,170 @@ class _EventoCardState extends State<EventoCard> {
         .isLoggedIn();
     _localLikes = widget.evento.likes!;
     _hasLiked = false;
+    _fechaEvento = widget.evento.timestampToDate();
+    _isSoon =
+        _fechaEvento.isAfter(DateTime.now().subtract(Duration(seconds: 1))) &&
+            _fechaEvento.isBefore(DateTime.now().add(Duration(days: 3)));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: _isLoggedIn ? () => mostrarOpciones() : () {},
-      child: Container(
-        child: Card(
-          elevation: 8,
-          child: Column(children: [
-            Container(
-              height: 250,
-              width: double.infinity,
-              child: widget.creating
-                  ? widget.image != null
-                      ? Image.file(widget.image!, fit: BoxFit.cover)
-                      : Image.asset('assets/images/nostalgia.jpg')
-                  : widget.evento.foto != null && widget.evento.foto != ''
-                      ? Image.network(widget.evento.foto!, fit: BoxFit.cover)
-                      : Image.asset('assets/images/nostalgia.jpg'),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    child: Text(
-                      widget.evento.nombre!,
-                      style: TextStyle(fontSize: 28),
-                      textAlign: TextAlign.center,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => VerEventoPage(
+                    evento: widget.evento,
+                    editing: false,
+                  )),
+        );
+      },
+      onLongPress:
+          _isLoggedIn && !widget.creating ? () => mostrarOpciones() : () {},
+      child: Stack(children: [
+        Container(
+          decoration: _isSoon
+              ? BoxDecoration(
+                  color: Color.fromARGB(255, 204, 0, 255),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(255, 204, 0, 255).withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                )
+              : BoxDecoration(),
+          child: Card(
+            elevation: 8,
+            child: Column(children: [
+              Container(
+                height: 250,
+                width: double.infinity,
+                child: widget.creating
+                    ? widget.image != null
+                        ? Image.file(widget.image!, fit: BoxFit.cover)
+                        : Image.asset('assets/images/nostalgia.jpg')
+                    : widget.evento.foto != null && widget.evento.foto != ''
+                        ? Image.network(widget.evento.foto!, fit: BoxFit.cover)
+                        : Image.asset('assets/images/nostalgia.jpg'),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        widget.evento.nombre!,
+                        style: TextStyle(fontSize: 28),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
+                  Container(
+                    margin: EdgeInsets.only(top: 8, right: 8),
+                    child: !widget.creating
+                        ? LikeButton(
+                            size: 30,
+                            circleColor: CircleColor(
+                              start: Colors.pinkAccent,
+                              end: Color.fromARGB(255, 204, 0, 255),
+                            ),
+                            bubblesColor: BubblesColor(
+                              dotPrimaryColor: Colors.pinkAccent,
+                              dotSecondaryColor:
+                                  Color.fromARGB(255, 204, 0, 255),
+                            ),
+                            likeBuilder: (bool isLiked) {
+                              return Icon(
+                                isLiked
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: isLiked
+                                    ? Color.fromARGB(255, 204, 0, 255)
+                                    : Colors.grey,
+                                size: 30,
+                              );
+                            },
+                            isLiked: _hasLiked,
+                            likeCount: _localLikes,
+                            countPostion: CountPostion.bottom,
+                            onTap: (bool isLiked) async {
+                              if (isLiked) {
+                                EventoService.dislikeEvento(
+                                    widget.evento.documentId!);
+                                _localLikes--;
+                                _hasLiked = false;
+                              } else {
+                                EventoService.likeEvento(
+                                    widget.evento.documentId!);
+                                _localLikes++;
+                                _hasLiked = true;
+                              }
+                              setState(() {});
+                              return !isLiked;
+                            },
+                          )
+                        : null,
+                  ),
+                ],
+              ),
+              widget.creating
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text("Tipo: " + widget.evento.tipo!),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text("Lugar: " + widget.evento.lugar!),
+                        ),
+                      ],
+                    )
+                  : Text(widget.evento.lugar!),
+              Text('${widget.evento.fecha()} a las ${widget.evento.hora()}'),
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  widget.evento.descripcion!,
+                  style: TextStyle(fontSize: 16),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 8, right: 8),
-                  child: !widget.creating
-                      ? LikeButton(
-                          size: 30,
-                          circleColor: CircleColor(
-                            start: Colors.pinkAccent,
-                            end: Colors.pink,
-                          ),
-                          bubblesColor: BubblesColor(
-                            dotPrimaryColor: Colors.pinkAccent,
-                            dotSecondaryColor: Colors.pink,
-                          ),
-                          likeBuilder: (bool isLiked) {
-                            return Icon(
-                              isLiked ? Icons.favorite : Icons.favorite_border,
-                              color: isLiked ? Colors.pink : Colors.grey,
-                              size: 30,
-                            );
-                          },
-                          isLiked: _hasLiked,
-                          likeCount: _localLikes,
-                          countPostion: CountPostion.bottom,
-                          onTap: (bool isLiked) async {
-                            if (isLiked) {
-                              EventoService.dislikeEvento(
-                                  widget.evento.documentId!);
-                              _localLikes--;
-                              _hasLiked = false;
-                            } else {
-                              EventoService.likeEvento(
-                                  widget.evento.documentId!);
-                              _localLikes++;
-                              _hasLiked = true;
-                            }
-                            setState(() {});
-                            return !isLiked;
-                          },
-                        )
-                      : null,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text("Tipo: " + widget.evento.tipo!),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text("Lugar: " + widget.evento.lugar!),
-                ),
-              ],
-            ),
-            Text('${widget.evento.fecha()} a las ${widget.evento.hora()}'),
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(widget.evento.descripcion!,
-                  style: TextStyle(fontSize: 16)),
-            ),
-          ]),
+              ),
+            ]),
+          ),
         ),
-      ),
+        !widget.creating && _isSoon
+            ? Positioned(
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color:
+                            Color.fromARGB(255, 238, 179, 253).withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 10,
+                        offset: Offset(0, 0),
+                      ),
+                    ],
+                  ),
+                  child: Text("¡EVENTO PRÓXIMO!",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 204, 0, 255))),
+                ),
+                top: 12,
+                left: 20,
+              )
+            : SizedBox(height: 0),
+      ]),
     );
   }
 
@@ -153,7 +220,10 @@ class _EventoCardState extends State<EventoCard> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => VerEventoPage(evento: widget.evento),
+                      builder: (_) => VerEventoPage(
+                        evento: widget.evento,
+                        editing: true,
+                      ),
                     ),
                   );
                 },
