@@ -5,7 +5,7 @@ class EventoService {
   static final CollectionReference eventos =
       FirebaseFirestore.instance.collection('eventos');
 
-  // obtener eventos Future / Stream
+  // obtener eventos
   static Stream<QuerySnapshot> obtenerEventos() {
     return eventos.snapshots();
   }
@@ -39,6 +39,4 @@ class EventoService {
   static Future<void> dislikeEvento(String id) {
     return eventos.doc(id).update({'likes': FieldValue.increment(-1)});
   }
-
-  // obtener eventos por tipo
 }

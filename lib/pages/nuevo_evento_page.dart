@@ -261,11 +261,11 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
         errores += "Debes seleccionar un tipo de evento.\n";
       if (!_isDatePicked) errores += "Debes seleccionar una fecha.\n";
       if (!_isTimePicked) errores += "Debes seleccionar una hora.\n";
-      // if (_isDatePicked && _isTimePicked) {
-      //   if (_timestamp.isBefore(DateTime.now())) {
-      //     errores += "El evento no puede ser pasado.";
-      //   }
-      // }
+      if (_isDatePicked && _isTimePicked) {
+        if (_timestamp.isBefore(DateTime.now())) {
+          errores += "El evento no puede ser pasado.";
+        }
+      }
       if (errores != "") {
         EasyLoading.showError(errores, duration: Duration(seconds: 3));
       } else {
@@ -285,7 +285,7 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
         EasyLoading.show(status: "Guardando evento...");
         EventoService.agregarEvento(_nuevoEvento).then((_) {
           EasyLoading.showSuccess("Evento guardado :-)");
-          // Navigator.pop(context);
+          Navigator.pop(context);
         });
       });
     }

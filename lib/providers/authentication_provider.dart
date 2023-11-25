@@ -8,7 +8,7 @@ class AuthenticationProvider with ChangeNotifier {
 
   User? get user => _user;
 
-  // instancias de autenticación
+  // lógica de autenticación
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -41,5 +41,6 @@ class AuthenticationProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // métodos
   bool isLoggedIn() => _user != null;
 }
