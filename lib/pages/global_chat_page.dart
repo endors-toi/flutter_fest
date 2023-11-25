@@ -83,7 +83,8 @@ class _GlobalChatPageState extends State<GlobalChatPage> {
                 ),
                 subtitle: Text(
                   mensaje.mensaje,
-                  style: TextStyle(fontSize: 16, color: Colors.black),
+                  style: TextStyle(
+                      fontSize: 16, color: Theme.of(context).primaryColorLight),
                 ),
               );
             },

@@ -98,11 +98,12 @@ class _UserDrawerState extends State<UserDrawer> {
                     await Provider.of<AuthenticationProvider>(context,
                             listen: false)
                         .signInWithGoogle();
-                    setState(() {
-                      _user = Provider.of<AuthenticationProvider>(context,
-                              listen: false)
-                          .user;
-                    });
+                    if (mounted)
+                      setState(() {
+                        _user = Provider.of<AuthenticationProvider>(context,
+                                listen: false)
+                            .user;
+                      });
                     widget.onRefresh();
                   },
                 ),

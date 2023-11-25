@@ -88,8 +88,11 @@ class _EventosPageState extends State<EventosPage> {
     } else {
       return LiquidPullToRefresh(
         onRefresh: () async {
+          await Future.delayed(Duration(seconds: 1));
           setState(() {});
         },
+        springAnimationDurationInMilliseconds: 500,
+        animSpeedFactor: 2,
         showChildOpacityTransition: false,
         child: ListView.separated(
           separatorBuilder: (context, index) => SizedBox(height: 16),

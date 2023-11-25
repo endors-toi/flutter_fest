@@ -99,23 +99,6 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
                     Container(
                       margin: EdgeInsets.all(8),
                       child: TextFormField(
-                        controller: _descripcionController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Descripción',
-                        ),
-                        onChanged: (_) => setState(() {}),
-                        validator: (desc) {
-                          if (desc == null || desc.trim() == "") {
-                            return 'Debes proporcionar una descripción.';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(8),
-                      child: TextFormField(
                         controller: _lugarController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -134,6 +117,25 @@ class _NuevoEventoPageState extends State<NuevoEventoPage> {
                       margin: EdgeInsets.all(8),
                       alignment: Alignment.center,
                       child: _dropdownTipo(context),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(8),
+                      child: TextFormField(
+                        controller: _descripcionController,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Descripción',
+                        ),
+                        onChanged: (_) => setState(() {}),
+                        validator: (desc) {
+                          if (desc == null || desc.trim() == "") {
+                            return 'Debes proporcionar una descripción.';
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 16),
