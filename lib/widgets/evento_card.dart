@@ -36,13 +36,17 @@ class _EventoCardState extends State<EventoCard> {
   void initState() {
     _isLoggedIn = Provider.of<AuthenticationProvider>(context, listen: false)
         .isLoggedIn();
-    _localLikes = widget.evento.likes!;
+    _fetchLikes();
     _hasLiked = false;
     _fechaEvento = widget.evento.timestampToDate();
     _isSoon =
         _fechaEvento.isAfter(DateTime.now().subtract(Duration(seconds: 1))) &&
             _fechaEvento.isBefore(DateTime.now().add(Duration(days: 3)));
     super.initState();
+  }
+
+  void _fetchLikes() {
+    _localLikes = widget.evento.likes!;
   }
 
   @override
@@ -52,11 +56,16 @@ class _EventoCardState extends State<EventoCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => VerEventoPage(
-                    evento: widget.evento,
-                    editing: false,
-                  )),
-        );
+            builder: (_) => VerEventoPage(
+              evento: widget.evento,
+              editing: false,
+            ),
+          ),
+        ).then((_) => setState(
+              () {
+                _fetchLikes();
+              },
+            ));
       },
       onLongPress:
           _isLoggedIn && !widget.creating ? () => mostrarOpciones() : () {},
